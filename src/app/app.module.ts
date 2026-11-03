@@ -23,6 +23,7 @@ import { InitService } from './services/init.service';
 import { environment } from '../environments/environment';
 import { SbUiResolverModule, SbUiResolverService } from '@sunbird-cb/resolver-v2';
 import { PipePublicURL } from './pipes/pipe-public-URL/pipe-public-URL.pipe';
+import { ChatbotComponent } from './chatbot/chatbot.component';
 
 export const ENVIRONMENT = new InjectionToken<any>('environment');
 
@@ -52,6 +53,7 @@ const appInitializer = (initSvc: InitService) => async () => {
     SlidersLibModule,
     TranslateModule,
     PipePublicURL,
+    ChatbotComponent,
     SbUiResolverModule.forRoot([...WIDGET_REGISTRATION_LIB_CONFIG]),
     TranslateModule.forRoot({
       loader: {

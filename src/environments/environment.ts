@@ -17,10 +17,12 @@ export const environment: IEnvironment = {
   production: getEnvValue('production', false),
   contentHost: getEnvValue('contentHost', ''),
   contentBucket: getEnvValue('contentBucket', 'assets/public'),
-  baseUrl: getEnvValue('baseUrl', ''),
-  portalURL: getEnvValue('portalURL', ''),
-  learnerPortalURL: getEnvValue('portalURL', ''),
-  telmetryUrl: getEnvValue('telmetryUrl', ''),
+  baseUrl: getEnvValue('baseUrl', 'https://iiidem.dev.karmayogibharat.net'),
+  portalURL: getEnvValue('portalURL', 'https://iiidem-portal.dev.karmayogibharat.net'),
+  learnerPortalURL: getEnvValue('portalURL', 'https://portal.dev.karmayogibharat.net'),
+  telmetryUrl: getEnvValue('telmetryUrl', 'https://iiidem-portal.dev.karmayogibharat.net'),
+  chatbotApiUrl: getEnvValue('chatbotApiUrl', 'https://tribot.tribal.gov.in/api/v1'),
+  chatbotApiKey: getEnvValue('chatbotApiKey', 'mota-pub-tribot-api-key'),
 }
 interface IEnvironment {
   name: string,
@@ -31,4 +33,6 @@ interface IEnvironment {
   portalURL: string
   learnerPortalURL: string
   telmetryUrl: string
+  chatbotApiUrl: string
+  chatbotApiKey: string
 }

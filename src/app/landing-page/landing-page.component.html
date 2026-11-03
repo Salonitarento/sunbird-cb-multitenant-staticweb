@@ -434,6 +434,8 @@
   </footer>
 </div>
 
+<app-chatbot *ngIf="!loading && tenant"></app-chatbot>
+
 <div *ngIf="!loading && !tenant" class="flex justify-center items-center min-h-screen">
   <div class="text-center">
     <h1 class="text-2xl font-bold text-red-600 mb-4">Tenant Configuration Not Found</h1>

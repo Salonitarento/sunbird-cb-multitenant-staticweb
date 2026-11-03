@@ -1,0 +1,126 @@
+<!-- Floating launcher -->
+<button *ngIf="!isOpen" type="button" class="floating-chat-btn" (click)="open()" aria-label="Chat with Jago">
+  <img src="/assets/chatbot/launcher.jpg" alt="" class="floating-bot-img">
+</button>
+
+<!-- Chat panel -->
+<div class="chatbot-panel" [class.open]="isOpen" [class.expanded]="isExpanded"
+  role="dialog" aria-label="Jago chat assistant" [attr.aria-hidden]="!isOpen">
+
+  <!-- Header -->
+  <div class="chat-header">
+    <div class="tricolor-bar"></div>
+    <div class="chat-identity">
+      <div class="avatar-container">
+        <img src="/assets/chatbot/avatar.png" alt="Jago" class="avatar-img">
+        <span class="status-dot"></span>
+      </div>
+      <div class="chat-info">
+        <h3 class="chat-name">Jago</h3>
+      </div>
+    </div>
+
+    <div class="chat-actions">
+      <div class="lang-dropdown-wrapper" [class.open]="isLangMenuOpen" #langDropdown>
+        <button class="lang-pill-btn" type="button" title="Select Language" (click)="toggleLangMenu($event)"
+          [attr.aria-expanded]="isLangMenuOpen">
+          <i class="ri-global-line globe-icon"></i>
+          <span>{{ selectedLanguage.label }}</span>
+          <i class="ri-arrow-down-s-line arrow-icon"></i>
+        </button>
+        <div class="lang-menu">
+          <div class="lang-menu-header">
+            <i class="ri-translate-2"></i>
+            <span>Select Language / भाषा चुनें</span>
+          </div>
+          <div class="lang-grid">
+            <button *ngFor="let lang of languages" type="button" class="lang-item"
+              [class.active]="lang.code === selectedLanguage.code" (click)="selectLanguage(lang)">
+              <span class="lang-name">{{ lang.label }}</span>
+              <span *ngIf="lang.isDefault" class="lang-badge">Default</span>
+              <span *ngIf="lang.native" class="lang-native">{{ lang.native }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="header-btn" [title]="isExpanded ? 'Collapse' : 'Expand'" (click)="toggleExpand()">
+        <i [class]="isExpanded ? 'ri-contract-left-right-line' : 'ri-expand-left-right-line'"></i>
+      </button>
+      <button type="button" class="header-btn" title="Close" (click)="close()">
+        <i class="ri-subtract-line"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="chat-body" #messagesArea>
+    <div class="security-notice">
+      <i class="ri-shield-check-fill notice-icon"></i>
+      <p class="notice-text">Official Government Assistant. Your conversation is secure and private.</p>
+    </div>
+
+    <div class="welcome-card">
+      <p class="welcome-greeting">Namaste! 🙏</p>
+      <p class="welcome-text">
+        I am <strong>Jago</strong>, your official AI assistant for the Ministry of Tribal Affairs. Ask me about
+        schemes, scholarships, eligibility, or any tribal welfare programme.
+      </p>
+    </div>
+
+    <div *ngFor="let message of messages; trackBy: trackByIndex" class="message-row" [ngClass]="message.sender">
+      <div *ngIf="message.sender === 'user'" class="message-bubble">{{ message.text }}</div>
+
+      <ng-container *ngIf="message.sender === 'bot'">
+        <div class="message-bubble" [innerHTML]="message.html"></div>
+        <div *ngIf="!message.typing && !message.isError" class="message-actions">
+          <button type="button" class="msg-action-btn" title="Copy" (click)="copyMessage(message)">
+            <i [class]="message.copied ? 'ri-check-line is-positive' : 'ri-file-copy-line'"></i>
+          </button>
+          <button type="button" class="msg-action-btn" title="Helpful"
+            [class.is-positive]="message.feedback === 'up'" [disabled]="message.feedback === 'down'"
+            (click)="setFeedback(message, 'up')">
+            <i [class]="message.feedback === 'up' ? 'ri-thumb-up-fill' : 'ri-thumb-up-line'"></i>
+          </button>
+          <button type="button" class="msg-action-btn" title="Not helpful"
+            [class.is-negative]="message.feedback === 'down'" [disabled]="message.feedback === 'up'"
+            (click)="setFeedback(message, 'down')">
+            <i [class]="message.feedback === 'down' ? 'ri-thumb-down-fill' : 'ri-thumb-down-line'"></i>
+          </button>
+        </div>
+      </ng-container>
+    </div>
+
+    <div *ngIf="showSuggestions" class="suggestions-container">
+      <span class="suggestions-label">SUGGESTED QUERIES</span>
+      <div class="suggestions-list">
+        <button *ngFor="let query of suggestions" type="button" class="suggestion-chip"
+          (click)="sendSuggestion(query)">{{ query }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input bar -->
+  <div class="chat-input-bar">
+    <div *ngIf="isWaiting" class="typing-indicator-bar">
+      <span class="typing-dots"><span>•</span><span>•</span><span>•</span></span>
+      <span class="typing-label">Jago is typing...</span>
+    </div>
+
+    <div class="input-wrapper">
+      <button type="button" class="icon-btn" [class.listening]="isListening" title="Voice Input"
+        (click)="startVoiceInput()">
+        <i class="ri-mic-line"></i>
+      </button>
+      <input #chatInput type="text" class="chat-input" [placeholder]="placeholder" [(ngModel)]="inputText"
+        (keydown.enter)="sendMessage()" aria-label="Message">
+      <button type="button" class="send-btn" title="Send Message" (click)="sendMessage()">
+        <i class="ri-send-plane-fill"></i>
+      </button>
+    </div>
+
+    <div class="security-footer">
+      <i class="ri-government-line"></i> Ministry of Tribal Affairs · <i class="ri-sparkling-2-fill"></i> AI Powered
+    </div>
+  </div>
+</div>
